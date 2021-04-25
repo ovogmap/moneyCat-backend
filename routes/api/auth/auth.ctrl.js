@@ -10,7 +10,7 @@ const generateJWT = (config, secret) => {
 
   return jwt.sign(config, secret, options)
 }
-
+// 월요일
 exports.googleCheck = async (req, res) => {
   try {
     const { access_token: accessToken } = req.body
