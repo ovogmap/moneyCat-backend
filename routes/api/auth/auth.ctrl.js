@@ -11,12 +11,36 @@ const generateJWT = (config, secret) => {
   return jwt.sign(config, secret, options)
 }
 
-exports.register = async (req, res) => {
-  const user = new User(req.body)
+exports.googleCheck = async (req, res) => {
   try {
-    await user.save()
-    res.status(200).json({ success: true })
-  } catch (e) {
-    res.status(400).json({ success: false, message: '실패!' })
+    const { access_token: accessToken } = req.body
+    const profile = await User.getGoogleProfile(accessToken)
+
+    const socialAccount = await User.findOne({
+      provider: 'google',
+      socialId: profile.socialId,
+    })
+
+    res.send({
+      exists: !!socialAccount,
+    })
+  } catch (err) {
+    res.status(403).json({
+      success: false,
+      message: err.message,
+    })
+  }
+}
+
+exports.googleLogin = async (req, res) => {
+  try {
+    const { access_token: accessToken } = req.body
+    const profile = await User.getGoogleProfile(accessToken)
+    res.send(profile)
+  } catch (err) {
+    res.status(403).json({
+      success: false,
+      message: err.message,
+    })
   }
 }
