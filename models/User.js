@@ -1,16 +1,22 @@
 const { google } = require('googleapis')
 const mongoose = require('mongoose')
+const { generateJWT } = require('../lib/jwt')
 
 const UserSchema = mongoose.Schema({
-  name: {
-    type: String,
-    maxlength: 10,
-  },
   email: {
     type: String,
     unique: true,
+    lowercase: true,
   },
-  photos: {
+  name: {
+    type: String,
+    maxlength: 50,
+  },
+  nickName: {
+    type: String,
+    maxlength: 10,
+  },
+  photoURL: {
     type: String,
   },
   provider: {
@@ -18,6 +24,10 @@ const UserSchema = mongoose.Schema({
   },
   socialId: {
     type: String,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 })
 

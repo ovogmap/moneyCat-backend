@@ -6,6 +6,8 @@ const cors = require('cors')
 
 const mongoose = require('mongoose')
 const config = require('./config/key')
+const dotenv = require('dotenv')
+dotenv.config()
 
 mongoose
   .connect(config.mongoURI, {
