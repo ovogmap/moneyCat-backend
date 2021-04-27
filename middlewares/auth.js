@@ -1,15 +1,14 @@
-const jwt = require('jsonwebtoken')
+const { decodeToken } = require('../lib/jwt')
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.headers['x-access-token'] || req.query.token
-    let decoded = null
+    const accessToken = req.headers['access_token'] || req.query.token
 
-    if (!token) {
+    if (!accessToken) {
       throw new Error('cannot signin')
     }
 
-    decoded = jwt.verify(token, process.env.SECRET) // 잘못된 token이면 err 발생
+    const decoded = await decodeToken(accessToken) // 잘못된 token이면 err 발생
 
     req.decoded = decoded
     next()

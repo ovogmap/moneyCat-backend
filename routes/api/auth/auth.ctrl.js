@@ -42,14 +42,13 @@ exports.googleLogin = async (req, res) => {
         },
         {
           expiresIn: '15d',
-        }
+        },
       )
       res.send({
         success: true,
         user,
         access_token: accessToken,
       })
-      // throw new Error('user is already exist')
     } else {
       console.log('없는 유저')
       const user = new User()
@@ -68,7 +67,7 @@ exports.googleLogin = async (req, res) => {
         },
         {
           expiresIn: '15d',
-        }
+        },
       )
 
       res.send({

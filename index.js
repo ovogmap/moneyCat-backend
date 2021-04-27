@@ -17,7 +17,7 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => console.log('MongoDB Connected...'))
-  .catch((err) => console.error(err))
+  .catch(err => console.error(err))
 
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
