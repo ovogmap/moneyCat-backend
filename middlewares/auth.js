@@ -2,7 +2,7 @@ const { decodeToken } = require('../lib/jwt')
 
 const authMiddleware = async (req, res, next) => {
   try {
-    const accessToken = req.headers['access_token'] || req.query.token
+    const accessToken = req.headers['access-token'] || req.query.token
 
     if (!accessToken) {
       throw new Error('cannot signin')

@@ -42,7 +42,7 @@ exports.googleLogin = async (req, res) => {
         },
         {
           expiresIn: '15d',
-        },
+        }
       )
       res.send({
         success: true,
@@ -67,7 +67,7 @@ exports.googleLogin = async (req, res) => {
         },
         {
           expiresIn: '15d',
-        },
+        }
       )
 
       res.send({
@@ -78,6 +78,34 @@ exports.googleLogin = async (req, res) => {
     }
   } catch (err) {
     res.status(401).json({
+      success: false,
+      message: err.message,
+    })
+  }
+}
+
+exports.checkAndRefresh = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.decoded.email })
+
+    const accessToken = await generateJWT(
+      {
+        subject: 'accessToken',
+        email: user.email,
+        name: user.name,
+      },
+      {
+        expiresIn: '15d',
+      }
+    )
+
+    res.send({
+      success: true,
+      user,
+      access_token: accessToken,
+    })
+  } catch (err) {
+    res.status(403).json({
       success: false,
       message: err.message,
     })
