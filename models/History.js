@@ -1,10 +1,8 @@
-const mongoose = require("mongoose")
-const User = require("./User")
-
-mongoose.set("useCreateIndex", true)
+const mongoose = require('mongoose')
+const User = require('./User')
 
 const HistorySchema = mongoose.Schema({
-  write: {
+  writer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: User,
   },
@@ -34,5 +32,5 @@ const HistorySchema = mongoose.Schema({
   },
 })
 
-const History = mongoose.model("History", HistorySchema)
+const History = mongoose.model('History', HistorySchema)
 module.exports = History
