@@ -1,9 +1,9 @@
-const History = require("../../../models/History")
+const History = require('../../../models/History')
 
 exports.create = async (req, res) => {
   try {
-    if (!Object.keys(req.body).length) throw new Error("body is not defiend")
-    // if (!req.body.write) throw new Error("body is not defiend")
+    if (!Object.keys(req.body).length) throw new Error('body is not defined')
+    // if (!req.body.write) throw new Error("body is not defined")
 
     const history = new History(req.body)
 
@@ -23,9 +23,12 @@ exports.create = async (req, res) => {
 
 exports.get = async (req, res) => {
   try {
-    const write = req.params?.write
-    if (!write) throw new Error("not found write")
-    const historyList = await History.find().populate(write).exec()
+    const writer = req.params?.writer
+
+    if (!writer) throw new Error('not found writer')
+
+    const historyList = await History.find({ writer })
+
     res.send({
       success: true,
       historyList,
@@ -43,7 +46,7 @@ exports.getDetail = async (req, res) => {
   try {
     const _id = req.params?.id
 
-    if (!_id) throw new Error("not found id")
+    if (!_id) throw new Error('not found id')
 
     const historyOne = await History.findOne({ _id })
 
@@ -61,13 +64,11 @@ exports.getDetail = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const _id = req.body.id
+    const _id = req.body._id
 
-    if (!_id) throw new Error("not found id")
+    if (!_id) throw new Error('not found id')
 
-    const deleteItem = await History.findOne({ _id })
-
-    deleteItem.remove()
+    await History.deleteOne({ _id })
 
     res.send({
       success: true,
@@ -83,6 +84,8 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const _id = req.body._id
+
+    if (!_id) throw new Error('not found id')
 
     await History.findOneAndUpdate({ _id }, req.body)
 
