@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const User = require('./User')
+const mongoose = require("mongoose")
+const User = require("./User")
 
 const HistorySchema = mongoose.Schema({
   writer: {
@@ -11,10 +11,10 @@ const HistorySchema = mongoose.Schema({
     maxlength: 50,
   },
   useType: {
-    type: Number,
+    type: String,
   },
   payType: {
-    type: Number,
+    type: String,
   },
   pay: {
     type: Number,
@@ -32,5 +32,5 @@ const HistorySchema = mongoose.Schema({
   },
 })
 
-const History = mongoose.model('History', HistorySchema)
+const History = mongoose.model("History", HistorySchema)
 module.exports = History
