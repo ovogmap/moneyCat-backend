@@ -17,14 +17,14 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => console.log('MongoDB Connected...'))
-  .catch(err => console.error(err))
+  .catch((err) => console.error(err))
 
 app.use(
   cors({
-    origin: ['https://money-cat-front.vercel.app'],
+    origin: ['https://money-cat-front.vercel.app', 'http://localhost:3000'],
     credentials: true,
     optionsSuccessStatus: 200,
-  }),
+  })
 )
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
