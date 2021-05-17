@@ -30,7 +30,9 @@ exports.get = async (req, res) => {
     let historyList = await History.find({ writer })
 
     if (month) {
-      historyList = historyList.filter(f => f.writeDate.split('-')[1] === month)
+      historyList = historyList.filter(
+        (f) => f.writeDate.split('-')[1] === month
+      )
       res.send({
         success: true,
         historyList,
@@ -78,59 +80,56 @@ exports.getSixMonths = async (req, res) => {
     if (+month < 6) {
       let thisYearMonth = []
       let lastYearMonth = []
+      let months = []
       for (let i = 0; i < monthArray.length; i++) {
         if (month === monthArray[i]) {
           thisYearMonth = monthArray.slice(0, i + 1)
           lastYearMonth = monthArray.slice(i + 1 - 6)
+          months = [
+            ...monthArray.slice(i + 1 - 6),
+            ...monthArray.slice(0, i + 1),
+          ]
         }
       }
 
-      const thisYearList = historyList.filter(history => {
+      const thisYearList = historyList.filter((history) => {
         if (history.writeDate.split('-')[0] === year) {
-          return thisYearMonth.filter(yearItem => {
+          return thisYearMonth.filter((yearItem) => {
             return history.writeDate.split('-')[1] === yearItem
           })
         }
       })
 
-      const lastYearList = historyList.filter(history => {
+      const lastYearList = historyList.filter((history) => {
         if (history.writeDate.split('-')[0] === String(+year - 1)) {
-          return lastYearMonth.filter(yearItem => {
+          return lastYearMonth.filter((yearItem) => {
             return history.writeDate.split('-')[1] === yearItem
           })
         }
       })
 
       let sixMonthHistoryList = [...lastYearList, ...thisYearList]
-      let 지출 = {}
-      let 수입 = {}
+      let 지출 = [0, 0, 0, 0, 0, 0]
+      let 수입 = [0, 0, 0, 0, 0, 0]
+      console.log(months)
       for (let i = 0; i < sixMonthHistoryList.length; i++) {
-        if (sixMonthHistoryList[i].useType === '지출') {
-          if (!지출[sixMonthHistoryList[i].writeDate.split('-')[1]]) {
-            지출[sixMonthHistoryList[i].writeDate.split('-')[1]] =
-              sixMonthHistoryList[i].pay
-          } else {
-            지출[sixMonthHistoryList[i].writeDate.split('-')[1]] +=
-              sixMonthHistoryList[i].pay
-          }
+        const index = months.indexOf(
+          sixMonthHistoryList[i].writeDate.split('-')[1]
+        )
+        const type = sixMonthHistoryList[i].useType
+        if (type === '지출') {
+          지출[index] += sixMonthHistoryList[i].pay
         } else {
-          if (!수입[sixMonthHistoryList[i].writeDate.split('-')[1]]) {
-            수입[sixMonthHistoryList[i].writeDate.split('-')[1]] =
-              sixMonthHistoryList[i].pay
-          } else {
-            수입[sixMonthHistoryList[i].writeDate.split('-')[1]] +=
-              sixMonthHistoryList[i].pay
-          }
+          수입[index] += sixMonthHistoryList[i].pay
         }
       }
-      console.log(지출)
-      console.log(수입)
+      console.log('지출', 지출)
+      console.log('수입', 수입)
 
       sixMonthHistoryList = {
-        지출개월: Object.keys(지출),
-        지출금액: Object.values(지출),
-        수입개월: Object.keys(수입),
-        수입금액: Object.values(수입),
+        label: months,
+        지출,
+        수입,
       }
 
       res.send({
@@ -145,9 +144,9 @@ exports.getSixMonths = async (req, res) => {
         }
       }
 
-      const thisYearList = historyList.filter(history => {
+      const thisYearList = historyList.filter((history) => {
         if (history.writeDate.split('-')[0] === year) {
-          return thisYearSixMonth.filter(yearItem => {
+          return thisYearSixMonth.filter((yearItem) => {
             return history.writeDate.split('-')[1] === yearItem
           })
         }
