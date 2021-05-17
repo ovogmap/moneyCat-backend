@@ -6,6 +6,7 @@ router.post('/delete', ctrl.delete)
 router.post('/update', ctrl.update)
 
 router.get('/get/:writer', ctrl.get)
+router.get('/get-sixmonths/:writer', ctrl.getSixMonths)
 router.get('/get-detail/:id', ctrl.getDetail)
 
 module.exports = router
